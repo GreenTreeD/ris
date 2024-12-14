@@ -1,0 +1,1 @@
+SELECT `currency` FROM `currency`;

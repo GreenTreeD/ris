@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% macro generate_currency_table(today_currency) %}
+
+{% endmacro%}
+
+{% block title %}Курс валют{% endblock %}
+
+{% block content %}
+<h1>Курс валют на {{current_date}}</h1>
+<div>
+  {% for currency in currencies %}
+    <a href="{{url_for('currency_bp.show_rate', currency=currency)}}" class="button">{{ currency }}</a>
+  {% endfor %}
+</div>
+{% if currency_cur %}
+<br><br>
+<h1>Курс {{currency_cur}} на {{current_date}}</h1>
+{% if rates %}
+<div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Валюта</th>
+            <th>Курс к {{currency_cur}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for rate in rates %}
+          <tr>
+            <td>{{rate[0]}}</td>
+            <td>{{rate[1]}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% else %}<span>Курс для данной валюты ещё не был обновлён, зайдите позже</span>{% endif %}
+{% endif %}
+{% if user_role == 'admin' %}
+<br>
+<a class="button" href="{{url_for('currency_bp.currency_update_index')}}">Обновить курс валют</a>
+{% endif %}
+{% endblock %}

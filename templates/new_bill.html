@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}Новый счёт{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h1>Создание нового счёта</h1>
+  <form method="POST" action="">
+    <div class="form-group">
+        {% if user_role == 'manager' %}
+        <label for="login">Логин клиента:</label>
+        <input type="text" id="login" name="login" required placeholder="Введите логин">
+        {% elif user_role == 'user' %}
+        <input type="hidden" value="{{user_login}}" name="login">
+        {% endif%}
+      <label for="currency">Выберите валюту:</label>
+      <select id="currency" name="currency" required>
+        {% for currency in currencies %}
+        <option value="{{ currency[0] }}">{{ currency[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn-submit">Создать</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

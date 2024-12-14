@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block title %}Обновление курса валют{% endblock %}
+
+{% block content %}
+<form method="POST">
+{% for currency in currencies %}
+<h1>Курс для {{currency}} на {{current_date}}</h1>
+    <div class="table-container">
+    <table>
+        <thead>
+          <tr>
+            <th>Валюта</th>
+            <th>Курс</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for o_c in currencies %}
+        {% if o_c != currency %}
+          <tr>
+            <td>{{o_c}}</td>
+            <td><input type="number" step="any" min="0" name="{{o_c}}_{{currency}}" required></td>
+          </tr>
+        {% endif%}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+{% endfor %}
+    <br>
+    <input type="submit" value="Отправить" class="button">
+    <input type="reset" value="Сбросить" class="button">
+</form>
+{% endblock %}

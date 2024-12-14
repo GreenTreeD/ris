@@ -1,0 +1,107 @@
+{% macro generate_menu(role) %}
+      <a href="{{url_for('main_menu')}}">Главная</a>
+      <a href="{{url_for('currency_bp.currency_index')}}">Курс валют</a>
+      {% if role == 'user' %}<a href="{{url_for('dashboard_bp.d_user_transfer_menu')}}">Переводы</a>{% endif %}
+{% endmacro %}
+
+{% macro generate_dropdown(role) %}
+      {% if role == 'unauth' %}<a href="{{url_for('auth_bp.auth_index')}}">Авторизация</a> {% endif %}
+      {% if role == 'manager' or role == 'worker' %}<a href="{{url_for('auth_bp.registration_index')}}">Регистрация</a>{% endif %}
+{% if role == 'user' %}<a href="{{url_for('dashboard_bp.d_user')}}">Личный кабинет</a>
+{% elif role == 'admin' %}<a href="{{url_for('dashboard_bp.d_admin')}}">Личный кабинет</a>
+{% elif role == 'manager' %}<a href="{{url_for('dashboard_bp.d_manager')}}">Личный кабинет</a>{% endif %}
+      {% if role != 'unauth' %}<a href="{{url_for('exit_func')}}">Выход</a> {% endif %}
+{% endmacro %}
+
+
+{% macro generate_user_info(user_info) %}
+<div class="form-container">
+    <h1>Личные данные</h1>
+    <div><strong>Уникальный идентификатор:</strong> {{ user_info[0] }}</div>
+    <div><strong>Логин:</strong> {{ user_info[6] }}</div>
+    <div><strong>Фамилия:</strong> {{ user_info[1] }}</div>
+    <div><strong>Дата рождения:</strong> {{ user_info[2] }}</div>
+    <div><strong>Адрес:</strong> {{ user_info[3] }}</div>
+    <div><strong>Номер телефона:</strong> {{ user_info[4] }}</div>
+    <div><strong>Дата начала обслуживания:</strong> {{ user_info[5] }}</div>
+<br>
+</div>
+{% endmacro %}
+
+{% macro generate_bills(bills, getter) %}
+<div class="form-container">
+    <h1>Cчета</h1>
+    {% if bills %}
+    {% for bill in bills %}
+    <div class="bill-card">
+        <div class="bill-id">{{ bill[0] }}</div>
+        <div class="bill-amount">{{ bill[2] }} {{ bill[1] }}</div>
+        <div class="bill-date">Последнее изменение: {{ bill[3] }}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span>У вас нет открытых счетов</span>
+    {% endif %}
+    {% if getter == 'user' %}
+    <a class="button" href="{{url_for('dashboard_bp.d_user_new_bill')}}">Оформить счёт</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro generate_bills_history(bills_history) %}
+<div class="form-container">
+    <h1>Внешние операции по счетам</h1>
+    {% if bills_history %}
+    {% for item in bills_history%}
+    <div class="operation-card">
+    <div class="operation-bill-id">{{ item[0] }}</div>
+    <div class="operation-amount {% if item[1] < 0 %}negative{% else %}positive{% endif %}">
+      {% if item[1] > 0 %}+{% endif %}{{ item[1] }} {{item[2]}}
+    </div>
+    <div class="operation-reason">
+      {% if item[4] == 'deposit' %}Зачисление{% elif item[4] == 'transfer' %}Перевод{% elif item[4] == 'withdraw' %}Снятие{% endif %}
+    </div>
+    <div class="operation-date">Дата операции: {{ item[3] }}</div>
+    {% if item[5] %}
+    <div class="operation-initiator">Проведено менеджером</div>
+    {% endif %}
+  </div>
+    {% endfor %}
+    <a class="button" href="{{url_for('dashboard_bp.d_user_history')}}">Просмотреть все операции</a>
+    {% else %}
+    <span>У вас нет последних операций</span>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro generate_bills_history(bills_history_inner) %}
+<div class="form-container">
+    <h1>Внутренние операции по счетам</h1>
+    {% if bills_history_inner %}
+    {% for item in bills_history_inner %}
+    <div class="operation-card">
+    <div class="operation-bill-id">От: {{ item[0] }}</div>
+    <div class="operation-bill-id">Кому: {{ item[1] }}</div>
+    <div class="operation-amount positive">
+      {{ item[2] }} {{ item[3] }}
+    </div>
+    <div class="operation-date">Дата операции: {{ item[4] }}</div>
+  </div>
+    {% endfor %}
+    <a class="button" href="{{url_for('dashboard_bp.d_user_history_inner')}}">Просмотреть все операции</a>
+    {% else %}
+    <span>У вас нет последних операций</span>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro generate_worker_info(user_info)%}
+<div class="form-container">
+    <h1>Личные данные</h1>
+    <div><strong>Уникальный идентификатор:</strong> {{ user_info[0] }}</div>
+    <div><strong>Логин:</strong> {{ user_info[1] }}</div>
+    <div><strong>Фамилия:</strong> {{ user_info[2] }}</div>
+    <div><strong>Должность:</strong> {{ user_info[3] }}</div>
+<br>
+</div>
+{% endmacro %}

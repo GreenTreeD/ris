@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% block title %}Перевод{% endblock %}
+
+{% block content %}
+<h1>Перевод</h1>
+{% if type == 'menu' %}
+<div class="form-container">
+    <a class="button" href="{{url_for('dashboard_bp.d_user_transfer_outer')}}">Перевод другому клиенту</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_user_transfer_inner')}}">Перевод между своими счетами</a>
+</div>
+{% elif type == 'outer' %}
+<div class="form-container">
+  <h1>Перевод другому клиенту</h1>
+  <form method="POST" action="">
+    <!-- Поле отправителя -->
+    <div class="form-group">
+      <label for="sender">Отправитель:</label>
+      <input type="text" id="sender" name="sender" value="{{ sender_login }}" readonly>
+    </div>
+    <!-- Выпадающий список счетов -->
+    <div class="form-group">
+      <label for="sender_bill">Выберите счет:</label>
+      <select id="sender_bill" name="sender_bill" required>
+        {% for bill in bills %}
+        <option value="{{bill[0]}}">{{ bill[0] }} {{ bill[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Поле получателя -->
+    <div class="form-group">
+      <label for="receiver">Получатель:</label>
+      <input type="text" id="receiver" name="receiver_login" required placeholder="Введите логин получателя">
+    </div>
+
+    <!-- Поле суммы -->
+    <div class="form-group">
+      <label for="amount">Сумма:</label>
+      <input type="number" id="amount" name="amount" required placeholder="Введите сумму" min="0.01" step="0.01">
+    </div>
+
+    <!-- Кнопка отправки -->
+    <div class="form-group">
+      <button type="submit" class="btn-submit">Перевести</button>
+    </div>
+  </form>
+</div>
+{% else %}
+<div class="form-container">
+  <h1>Перевод между своими счетами</h1>
+  <form method="POST" action="">
+    <!-- Выбор отправляющего счета -->
+    <div class="form-group">
+      <label for="sender-bill">Отправляющий счет:</label>
+      <select id="sender-bill" name="sender_bill" required>
+        {% for bill in bills %}
+        <option value="{{ bill[0] }}">{{ bill[0] }} {{ bill[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Выбор принимающего счета -->
+    <div class="form-group">
+      <label for="receiver-bill">Принимающий счет:</label>
+      <select id="receiver-bill" name="receiver_bill" required>
+        {% for bill in bills %}
+        <option value="{{ bill[0] }}">{{ bill[0] }} {{ bill[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Поле для ввода суммы -->
+    <div class="form-group">
+      <label for="amount">Сумма:</label>
+      <input type="number" id="amount" name="amount" required placeholder="Введите сумму" min="0.01" step="0.01">
+    </div>
+
+    <!-- Кнопка отправки -->
+    <div class="form-group">
+      <button type="submit" class="btn-submit">Перевести</button>
+    </div>
+  </form>
+</div>
+
+
+{% endif %}
+{% endblock %}

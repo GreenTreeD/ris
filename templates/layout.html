@@ -1,0 +1,29 @@
+{% import 'macros.html' as macros %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Главная страница {% endblock %}</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+  <div class="container">
+    <h1 class="headline">
+      Банкинг
+      <img src="{{url_for('static', filename='user.svg')}}" alt="User Icon" class="headline_img">
+      <div class="dropdown-menu">
+      {{macros.generate_dropdown(user_role)}}
+      </div>
+    </h1>
+      <div class="menu">
+        {{macros.generate_menu(user_role)}}
+      </div>
+    {% block content %}
+    {% endblock %}
+    </div>
+  <footer>
+    <p>Футер</p>
+  </footer>
+</body>
+</html>

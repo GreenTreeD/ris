@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<h1> Здравствуйте, {{user_login}}!</h1>
+{% if user_role == 'user' %}
+{{ macros.generate_user_info(user_info) }}
+<br>
+{{ macros.generate_bills(bills, 'user') }}
+<br>
+{{ macros.generate_bills_history(bills_history) }}
+<br>
+{{ macros.generate_bills_history(bills_history_inner) }}
+<br>
+<a class="button" href="{{url_for('dashboard_bp.statistics_user_index')}}">Просмотреть детализацию по счетам</a>
+{% elif user_role == 'manager' %}
+{{ macros.generate_worker_info(user_info) }}
+<br>
+<div class="form-container" style="text-align:center">
+    <h1>Меню работы с клиентами</h1>
+    <a class="button" href="">Регистрация нового клиента</a>
+    <a class="button" href="">Просмотр информации о клиенте</a>
+    <a class="button" href="">Зачисление средств</a>
+    <a class="button" href="">Вывод средств</a>
+</div>
+<br>
+<div class="form-container" style="text-align:center">
+    <h1>Просмотр статистики</h1>
+
+</div>
+{% else %}
+{{ macros.generate_worker_info(user_info) }}
+<br>
+<div class="form-container" style="text-align:center">
+    <h1>Меню</h1>
+    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового работника</a>
+    <a class="button" href="">Внесение курса валюты на текущую дату</a>
+</div>
+<br>
+<div class="form-container" style="text-align:center">
+    <h1>Таблицы</h1>
+    <a class="button" href="">user</a>
+    <a class="button" href="">workers</a>
+    <a class="button" href="">bill</a>
+    <a class="button" href="">bill_history</a>
+    <a class="button" href="">bill_history_inner</a>
+    <a class="button" href="">currency</a>
+    <a class="button" href="">exchange_rates</a>
+</div>
+{% endif %}
+{% endblock %}

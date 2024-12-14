@@ -1,0 +1,1 @@
+SELECT `login`, `user_role` FROM `workers` WHERE `login` = '$login' AND `password` = '$password';
