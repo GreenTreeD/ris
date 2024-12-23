@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %}Стастистика{% endblock %}
+
+{% block content %}
+<h1>Статистика</h1>
+
+<div class="form-container">
+    <a href="{{url_for('query_bp.query_table_menu')}}"><h1>Таблицы</h1></a>
+    {% for item in table %}
+    <a class="button" href="{{url_for('query_bp.table_query', resource_name=item[0])}}">{{item[1]}}</a>
+    {% endfor %}
+</div>
+<br><br>
+<div class="form-container">
+    <a href="{{url_for('query_bp.query_report_menu')}}"><h1>Отчёты</h1></a>
+    {% for item in report %}
+    <a class="button" href="{{url_for('query_bp.report_query', resource_name=item[0])}}">{{item[1]}}</a>
+    {% endfor %}
+</div>
+{% endblock %}

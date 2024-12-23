@@ -2,6 +2,7 @@
       <a href="{{url_for('main_menu')}}">Главная</a>
       <a href="{{url_for('currency_bp.currency_index')}}">Курс валют</a>
       {% if role == 'user' %}<a href="{{url_for('dashboard_bp.d_user_transfer_menu')}}">Переводы</a>{% endif %}
+      {% if role != 'user' %}<a href="{{url_for('query_bp.query_index')}}">Статистика</a>{% endif %}
 {% endmacro %}
 
 {% macro generate_dropdown(role) %}

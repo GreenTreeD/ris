@@ -267,6 +267,93 @@ CREATE TABLE `exchange_rates` (
 
 Обновляется через админскую панель во вкладке "Курс банка", своми руками ничего вводить не надо.
 
+# VIEWS для сбора статистики
+Я человек простой и категорически не понимаю а нннахуй хранить ещё какие-то данные в бд, поэтому все отчётности сделаны с помощью views.
+
+### Разности в курсах валют
+
+```sql
+CREATE VIEW exchange_rate_differences
+AS
+WITH rates_with_row_numbers AS (
+    SELECT
+        from_currency,
+        to_currency,
+        YEAR(rate_date) AS rate_year,
+        MONTH(rate_date) AS rate_month,
+        rate,
+        ROW_NUMBER() OVER (PARTITION BY from_currency, to_currency, YEAR(rate_date), MONTH(rate_date) ORDER BY rate_date ASC) AS row_num_asc,
+        ROW_NUMBER() OVER (PARTITION BY from_currency, to_currency, YEAR(rate_date), MONTH(rate_date) ORDER BY rate_date DESC) AS row_num_desc
+    FROM exchange_rates
+),
+first_rates AS (
+    SELECT
+        from_currency,
+        to_currency,
+        rate_year,
+        rate_month,
+        rate AS first_rate
+    FROM rates_with_row_numbers
+    WHERE row_num_asc = 1
+),
+last_rates AS (
+    SELECT
+        from_currency,
+        to_currency,
+        rate_year,
+        rate_month,
+        rate AS last_rate
+    FROM rates_with_row_numbers
+    WHERE row_num_desc = 1
+)
+SELECT
+    f.from_currency,
+    f.to_currency,
+    f.rate_year,
+    f.rate_month,
+    f.first_rate,
+    l.last_rate
+FROM first_rates f
+JOIN last_rates l
+ON f.from_currency = l.from_currency
+   AND f.to_currency = l.to_currency
+   AND f.rate_year = l.rate_year
+   AND f.rate_month = l.rate_month;
+```
+
+### Количество новых клиентов в месяц
+```sql
+CREATE VIEW `user_contract_count` AS
+SELECT COUNT(`user_id`) as `user_count`, month(`contract_date`) as `month`, year(`contract_date`) as `year`  
+FROM `user` 
+GROUP BY month(`contract_date`),  year(`contract_date`);
+```
+
+### Отчётность по каждому счёту
+```sql
+CREATE VIEW bill_summary AS
+SELECT
+    YEAR(change_date) AS `year`,
+    MONTH(change_date) AS `month`,
+    `bill_id`,
+    COUNT(*) AS operation_count, -- Количество операций за месяц
+    MAX(new_amount) AS max_balance, -- Максимальное количество денег на счёте
+    MIN(new_amount) AS min_balance, -- Минимальное количество денег на счёте
+    SUM(CASE 
+            WHEN reason = 'withdraw' THEN old_amount - new_amount
+            ELSE 0
+        END) AS total_withdrawn, -- Общее количество снятых денег
+    SUM(CASE 
+            WHEN reason = 'deposit' THEN new_amount - old_amount
+            ELSE 0
+        END) AS total_deposited -- Общее количество внесённых денег
+FROM bill_history
+GROUP BY 
+    YEAR(change_date), 
+    MONTH(change_date), 
+    bill_id;
+```
+
 
 # Структура приложения
 ### Основное приложение

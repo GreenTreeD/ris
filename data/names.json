@@ -1,0 +1,15 @@
+{
+  "user": "Пользователи",
+  "workers": "Работники",
+  "bill": "Счета",
+  "bill_history": "Внешняя история счетов",
+  "bill_inner_history": "Внутренняя история счетов",
+  "currency": "Валюты",
+  "exchange_rates": "Курс валют",
+  "exchange_rate_differences": "Изменение курса валют",
+  "bill_summary": "Статистика по счетам",
+  "all_statistics": "Общая статистика",
+  "create_bill_summary": "Cоздать отчёт для таблицы со статистикой по счетам",
+  "create_exchange_rate_differences": "Cоздать отчёт для таблицы с изменением курса валют",
+  "create_all_statistics": "Cоздать отчёт для таблицы с общей статистикой"
+}

@@ -167,8 +167,34 @@ def getbilldetalisationinner(db_config, sql_provider, user_login, begin_date, en
         if result:
             result = result[0]
             bill_detalisation.append([item[0], item[1], result[0], result[1]])
-
     return ProductInfoRespronse(tuple(bill_detalisation), error_message="", status=True)
+
+
+def deposit_manager(db_config, sql_provider, user_data, login):
+    _sql = sql_provider.get('worker_verification.sql', worker_login=login)
+    result, schema = select_list(db_config, _sql)
+    if not schema:
+        return ProductInfoRespronse((), error_message="Ошибка сервера.", status=False)
+    if not result:
+        return ProductInfoRespronse((), error_message="Идентификационный номер не был найден.", status=False)
+    result = call_proc_state(db_config, 'deposit', (user_data.get('amount'), user_data.get('account_number'), result[0][0]))
+    if not result:
+        return ProductInfoRespronse((), error_message="", status=True)
+    return ProductInfoRespronse((result.args[0], result.args[1]), error_message=result.args[1], status=False)
+
+
+def withdraw_manager(db_config, sql_provider, user_data, login):
+    _sql = sql_provider.get('worker_verification.sql', worker_login=login)
+    result, schema = select_list(db_config, _sql)
+    if not schema:
+        return ProductInfoRespronse((), error_message="Ошибка сервера.", status=False)
+    if not result:
+        return ProductInfoRespronse((), error_message="Идентификационный номер не был найден.", status=False)
+    result = call_proc_state(db_config, 'withdraw', (user_data.get('amount'), user_data.get('account_number'), result[0][0]))
+    if not result:
+        return ProductInfoRespronse((), error_message="", status=True)
+    return ProductInfoRespronse((result.args[0], result.args[1]), error_message=result.args[1], status=False)
+
 
 
 

@@ -17,36 +17,20 @@
 {% elif user_role == 'manager' %}
 {{ macros.generate_worker_info(user_info) }}
 <br>
-<div class="form-container" style="text-align:center">
+<div class="form-container"ybrf>
     <h1>Меню работы с клиентами</h1>
-    <a class="button" href="">Регистрация нового клиента</a>
-    <a class="button" href="">Просмотр информации о клиенте</a>
-    <a class="button" href="">Зачисление средств</a>
-    <a class="button" href="">Вывод средств</a>
-</div>
-<br>
-<div class="form-container" style="text-align:center">
-    <h1>Просмотр статистики</h1>
-
+    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового клиента</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_info')}}">Просмотр информации о клиенте</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_deposit')}}">Зачисление средств</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_withdraw')}}">Вывод средств</a>
 </div>
 {% else %}
 {{ macros.generate_worker_info(user_info) }}
 <br>
-<div class="form-container" style="text-align:center">
+<div class="form-container">
     <h1>Меню</h1>
     <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового работника</a>
-    <a class="button" href="">Внесение курса валюты на текущую дату</a>
-</div>
-<br>
-<div class="form-container" style="text-align:center">
-    <h1>Таблицы</h1>
-    <a class="button" href="">user</a>
-    <a class="button" href="">workers</a>
-    <a class="button" href="">bill</a>
-    <a class="button" href="">bill_history</a>
-    <a class="button" href="">bill_history_inner</a>
-    <a class="button" href="">currency</a>
-    <a class="button" href="">exchange_rates</a>
+    <a class="button" href="{{url_for('currency_bp.currency_update_index')}}">Внесение курса валюты на текущую дату</a>
 </div>
 {% endif %}
 {% endblock %}

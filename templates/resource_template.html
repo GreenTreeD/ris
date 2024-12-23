@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<h1>{{name}}</h1>
+
+<div class="table-container">
+    <table>
+        <thead>
+          <tr>
+              {% for item in header %}<th>{{item}}</th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in content %}
+          <tr>
+              {% for item in row %}<td>{{item}}</td>{% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

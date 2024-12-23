@@ -1,0 +1,1 @@
+SELECT `worker_id` FROM `workers` WHERE `login` = '$worker_login';

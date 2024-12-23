@@ -1,0 +1,6 @@
+{
+  "bill_count.sql" : "SELECT COUNT(*) FROM `bill`;",
+  "user_count.sql" : "SELECT COUNT(*) FROM `user`;",
+  "worker_count.sql" : "SELECT COUNT(*) FROM `workers`;",
+  "currency_count.sql" : "SELECT COUNT(*) FROM `currency`;"
+}

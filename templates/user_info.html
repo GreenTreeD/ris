@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block title %}Информация о клиенте{% endblock %}
+
+{% block content %}
+{% if type == 'GET' %}
+<div class="form-container">
+    <h1>Поиск информации о клиенте</h1>
+    <form method="POST" action="">
+        <!-- Поле для ввода логина -->
+        <div class="form-group">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" required placeholder="Введите логин">
+        </div>
+        <!-- Кнопка отправки -->
+        <div class="form-group">
+            <button type="submit" class="btn-submit">Найти</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<h1>Информация о пользователе</h1>
+{{ macros.generate_user_info(user_info) }}
+<br>
+{{ macros.generate_bills(bills, 'manager') }}
+{% endif %}
+{% endblock %}
