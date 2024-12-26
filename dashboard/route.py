@@ -38,17 +38,16 @@ def d_user():
         return render_with_defaults("error.html",
                                     message=bills.error_message)
 
-    bill_history = gethistory(current_app.config['db_config'], provider, session.get('user_login'), "LIMIT 5")
+    bill_history = gethistory(current_app.config['db_config'], provider, session.get('user_login'), "LIMIT 3")
     if not bill_history.status:
         return render_with_defaults("error.html",
                                     message=bill_history.error_message)
 
     bill_history_inner = getinnerhistory(current_app.config['db_config'], provider, session.get('user_login'),
-                                         "LIMIT 5")
+                                         "LIMIT 3")
     if not bill_history_inner.status:
         return render_with_defaults("error.html",
                                     message=bill_history_inner.error_message)
-
     return render_with_defaults("dashboard.html",
                                 user_login=session.get('user_login'),
                                 user_info=user_info.result,
@@ -63,7 +62,9 @@ def d_user_history():
     bill_history = gethistory(current_app.config['db_config'], provider, session.get('user_login'))
     if not bill_history.status:
         return render_with_defaults("error.html", message=bill_history.error_message)
-    return render_with_defaults("dashboard.html", bill_history=bill_history, type="outer")
+    return render_with_defaults("dashboard_user_history.html",
+                                bill_history=bill_history.result,
+                                type="outer")
 
 
 @blueprint_dashboard.route('/user/inner_history')
@@ -73,8 +74,8 @@ def d_user_history_inner():
     if not bill_history.status:
         return render_with_defaults("error.html",
                                     message=bill_history.error_message)
-    return render_with_defaults("dashboard.html",
-                                bill_history=bill_history,
+    return render_with_defaults("dashboard_user_history.html",
+                                bill_history=bill_history.result,
                                 type="inner")
 
 
@@ -261,12 +262,12 @@ def d_manager_info():
     if request.method == 'GET':
         return render_with_defaults("user_info.html", type="GET")
     else:
-        user_info = getuserinfo(current_app.config['db_config'], provider, request.form.get('user_login'))
+        user_info = getuserinfo(current_app.config['db_config'], provider, request.form.get('login'))
         if not user_info.status:
             return render_with_defaults("error.html",
                                         message=user_info.error_message)
 
-        bills = getbills(current_app.config['db_config'], provider, session.get('user_login'))
+        bills = getbills(current_app.config['db_config'], provider, request.form.get('login'))
         if not bills.status:
             return render_with_defaults("error.html",
                                         message=bills.error_message)

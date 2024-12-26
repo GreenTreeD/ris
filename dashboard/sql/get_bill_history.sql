@@ -1,5 +1,5 @@
 SELECT `bill_history`.`bill_id`,
-(`old_amount`-`new_amount`) AS `money`,
+(`new_amount`-`old_amount`) AS `money`,
 `currency`,
 `change_date`,
 `reason`,
@@ -10,4 +10,4 @@ FROM `bill_history` JOIN
 ) AS `bill_t`
 ON `bill_t`.`bill_id`=`bill_history`.`bill_id`
 JOIN `currency` USING (`currency_id`)
-ORDER BY `change_date` $detail;
+ORDER BY `change_date` DESC $detail;

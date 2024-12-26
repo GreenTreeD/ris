@@ -9,9 +9,29 @@
 <br>
 {{ macros.generate_bills(bills, 'user') }}
 <br>
-{{ macros.generate_bills_history(bills_history) }}
+<div class="form-container">
+    <h1>Внешние операции по счетам</h1>
+    {% if bills_history %}
+    {% for item in bills_history%}
+    {{ macros.generate_bills_history(item) }}
+    {% endfor %}
+    <a class="button" href="{{url_for('dashboard_bp.d_user_history')}}">Просмотреть все операции</a>
+    {% else %}
+    <span>У вас нет последних операций</span>
+    {% endif %}
+</div>
 <br>
-{{ macros.generate_bills_history(bills_history_inner) }}
+<div class="form-container">
+    <h1>Внутренние операции по счетам</h1>
+    {% if bills_history_inner %}
+    {% for item in bills_history_inner %}
+    {{ macros.generate_bills_history_inner(item) }}
+    {% endfor %}
+    <a class="button" href="{{url_for('dashboard_bp.d_user_history_inner')}}">Просмотреть все операции</a>
+    {% else %}
+    <span>У вас нет последних операций</span>
+    {% endif %}
+</div>
 <br>
 <a class="button" href="{{url_for('dashboard_bp.statistics_user_index')}}">Просмотреть детализацию по счетам</a>
 {% elif user_role == 'manager' %}

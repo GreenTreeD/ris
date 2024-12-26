@@ -13,7 +13,7 @@ blueprint_query = Blueprint('query_bp', __name__, template_folder='templates')
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
-@blueprint_query.route('/', methods=['POST', 'GET'])
+@blueprint_query.route('/', methods=['GET'])
 @role_required(['manager', 'admin'])
 def query_index():
     table = generate_menu_list(session.get('user_role'), 'table')

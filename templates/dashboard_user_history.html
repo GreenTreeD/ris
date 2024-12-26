@@ -4,10 +4,17 @@
 
 {% block content %}
 <div class="table-container">
-    <h1>{% if type == "inner" %}Внутренние{% else %}Внешние{% endif %}операции по счетам</h1>
+    <h1>{% if type == "inner" %}Внутренние{% else %}Внешние{% endif %} операции по счетам</h1>
     {% for bill in bill_history %}
-    <div>{{bill}}</div>
+    <div>
+        {% if type == "inner" %}
+        {{ macros.generate_bills_history(bill)}}
+        {% else %}
+
+        {% endif %}
+    </div>
     {% endfor %}
 </div>
-<a class="button" href="url_for{{'dashboard_bp.d_user'}}">Назад</a>
+<br>
+<a class="button" href="{{url_for('dashboard_bp.d_user')}}">Назад</a>
 {% endblock %}

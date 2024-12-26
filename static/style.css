@@ -42,6 +42,15 @@ h1 {
   position: absolute;
   right: 0px;
 }
+.auth-mode {
+color: #89a4b1;
+font-weight: 400;
+font-size: 17px;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    right: 63px;
+}
 
 .message {
   background-color: #e0e0e0; /* Серый фон для сообщения */

@@ -33,7 +33,7 @@ def newbill(db_config, sql_provider, user_data):
     return ProductInfoRespronse(result, error_message="Произошла ошибка при создании нового счёта", status=False)
 
 
-def gethistory(db_config, sql_provider, user_login, detail: str=""):
+def gethistory(db_config, sql_provider, user_login, detail: str=" "):
     _sql = sql_provider.get('get_bill_history.sql',
                             user_login=user_login,
                             detail=detail)
@@ -43,8 +43,8 @@ def gethistory(db_config, sql_provider, user_login, detail: str=""):
     return ProductInfoRespronse(result, error_message="Ошибка при получении истории внешних операций.", status=False)
 
 
-def getinnerhistory(db_config, sql_provider, user_login, detail):
-    _sql = sql_provider.get('get_bill_history.sql',
+def getinnerhistory(db_config, sql_provider, user_login, detail : str=" "):
+    _sql = sql_provider.get('get_bill_history_inner.sql',
                             user_login=user_login,
                             detail=detail)
     result, schema = select_list(db_config, _sql)

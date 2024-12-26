@@ -11,6 +11,7 @@
   <div class="container">
     <h1 class="headline">
       Банкинг
+      <span class="auth-mode">{% if user_role == 'unauth' %}Вы не авторизованы{% else %}Вы авторизованы как {{user_role}}{% endif %}</span>
       <img src="{{url_for('static', filename='user.svg')}}" alt="User Icon" class="headline_img">
       <div class="dropdown-menu">
       {{macros.generate_dropdown(user_role)}}
