@@ -1,0 +1,1 @@
+SELECT bill_id, COUNT(reason) FROM bill_history GROUP BY bill_id;

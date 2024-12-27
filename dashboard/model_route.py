@@ -127,6 +127,7 @@ def getbilldetalisation(db_config, sql_provider, user_login, begin_date, end_dat
         return ProductInfoRespronse((), error_message="", status=True)
 
     bills = [(i[0],i[1]) for i in result] # номер счёта и валюта
+    print(bills)
     bill_detalisation = []
     # item in bill_detalisation: bill_id, currency, total_deposit, total_withdraw, total_transfer_out, total_transfer_in
 
@@ -166,7 +167,8 @@ def getbilldetalisationinner(db_config, sql_provider, user_login, begin_date, en
             return ProductInfoRespronse((), error_message="Ошибка сервера.", status=False)
         if result:
             result = result[0]
-            bill_detalisation.append([item[0], item[1], result[0], result[1]])
+            if not (result[0] == result[1] == 0):
+                bill_detalisation.append([item[0], item[1], result[0], result[1]])
     return ProductInfoRespronse(tuple(bill_detalisation), error_message="", status=True)
 
 

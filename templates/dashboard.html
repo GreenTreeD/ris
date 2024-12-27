@@ -34,23 +34,7 @@
 </div>
 <br>
 <a class="button" href="{{url_for('dashboard_bp.statistics_user_index')}}">Просмотреть детализацию по счетам</a>
-{% elif user_role == 'manager' %}
+{% elif user_role == 'manager' or user_role == 'admin' %}
 {{ macros.generate_worker_info(user_info) }}
-<br>
-<div class="form-container"ybrf>
-    <h1>Меню работы с клиентами</h1>
-    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового клиента</a>
-    <a class="button" href="{{url_for('dashboard_bp.d_manager_info')}}">Просмотр информации о клиенте</a>
-    <a class="button" href="{{url_for('dashboard_bp.d_manager_deposit')}}">Зачисление средств</a>
-    <a class="button" href="{{url_for('dashboard_bp.d_manager_withdraw')}}">Вывод средств</a>
-</div>
-{% else %}
-{{ macros.generate_worker_info(user_info) }}
-<br>
-<div class="form-container">
-    <h1>Меню</h1>
-    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового работника</a>
-    <a class="button" href="{{url_for('currency_bp.currency_update_index')}}">Внесение курса валюты на текущую дату</a>
-</div>
 {% endif %}
 {% endblock %}

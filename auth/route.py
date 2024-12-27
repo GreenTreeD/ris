@@ -21,11 +21,9 @@ def auth_main():
     res_info = auth(current_app.config['db_config'], user_data, provider)
     if not res_info.status:
         return render_with_defaults('error.html',
-
                                     message="Ошибка сервера")
     if not res_info.result:
         return render_with_defaults('error.html',
-
                                     message="Такой пользователь не существует")
     session['user_role'] = res_info.result[1]
     session['user_login'] = res_info.result[0]

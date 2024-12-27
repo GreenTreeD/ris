@@ -14,22 +14,23 @@
     ],
     "report": [
       "create_all_statistics"
+    ],
+    "query" : [
+
     ]
   },
   "manager": {
     "table": [
-      "user",
-      "bill",
-      "bill_inner_history",
-      "currency",
-      "bill_history",
-      "exchange_rates",
+      "all_statistics",
       "exchange_rate_differences",
       "bill_summary"
     ],
     "report": [
       "create_bill_summary",
       "create_exchange_rate_differences"
+    ],
+    "query" : [
+
     ]
   }
 }

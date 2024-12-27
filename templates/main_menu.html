@@ -3,8 +3,26 @@
 {% block title %}Главное меню {% endblock %}
 
 {% block content %}
+{% if user_role == 'unauth' %}
 <h1>Добро пожаловать!</h1>
 <p>Воспользуйтесь кнопками меню для дальнейшей работы.</p>
 <p>Если Вы ещё не являетесь клиентом банка, обратитесь для регистрации к менеджеру.</p>
 <p>Если Вы являетесь новым сотрудником, обратитесь к администратору для регистрации в системе.</p>
+{% endif %}
+{% if user_role == 'admin' %}
+<div class="form-container">
+    <h1>Меню администратора</h1>
+    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового работника</a>
+    <a class="button" href="{{url_for('currency_bp.currency_update_index')}}">Внесение курса валюты</a>
+</div>
+{% endif %}
+{% if user_role == 'manager' %}
+<div class="form-container">
+    <h1>Меню работы с клиентами</h1>
+    <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового клиента</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_info')}}">Просмотр информации о клиенте</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_deposit')}}">Зачисление средств</a>
+    <a class="button" href="{{url_for('dashboard_bp.d_manager_withdraw')}}">Вывод средств</a>
+</div>
+{% endif %}
 {% endblock %}

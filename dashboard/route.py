@@ -60,6 +60,7 @@ def d_user():
 @role_required(['user'])
 def d_user_history():
     bill_history = gethistory(current_app.config['db_config'], provider, session.get('user_login'))
+
     if not bill_history.status:
         return render_with_defaults("error.html", message=bill_history.error_message)
     return render_with_defaults("dashboard_user_history.html",
@@ -79,17 +80,6 @@ def d_user_history_inner():
                                 type="inner")
 
 
-@blueprint_dashboard.route('/user/history/<bill_id>+<change_date>')
-@role_required(['user'])
-def d_user_bill(bill_id, change_date):
-    bill_history = gethistorydetails(current_app.config['db_config'], provider,
-                                     bill_id, change_date)
-    if not bill_history.status:
-        return render_with_defaults("error.html",
-                                    message=bill_history.error_message)
-    return render_with_defaults("transfer_detalisation.html")
-
-
 @blueprint_dashboard.route('/user/statistics', methods=["GET", "POST"])
 @role_required(['user'])
 def statistics_user_index():
@@ -102,6 +92,7 @@ def statistics_user_index():
 
     detalisation_bills = getbilldetalisation(current_app.config['db_config'], provider,
                                              session.get('user_login'), begin_date, end_date)
+    print(detalisation_bills.result)
     if not detalisation_bills.status:
         return render_with_defaults("error.html",
                                     message=detalisation_bills.error_message)

@@ -7,10 +7,10 @@
     <h1>{% if type == "inner" %}Внутренние{% else %}Внешние{% endif %} операции по счетам</h1>
     {% for bill in bill_history %}
     <div>
-        {% if type == "inner" %}
+        {% if type == "outer" %}
         {{ macros.generate_bills_history(bill)}}
         {% else %}
-
+        {{ macros.generate_bills_history_inner(bill)}}
         {% endif %}
     </div>
     {% endfor %}
