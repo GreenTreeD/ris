@@ -106,7 +106,7 @@
     </div>
     {% elif  item['type'] == 'select' %}
     <div class="form-group">
-        <lable for="{{ item['name'] }}">{{ item['local'] }}:</lable>
+        <label for="{{ item['name'] }}">{{ item['local'] }}:</label>
         <select name="{{ item['name'] }}">
             <option disabled selected value> -- -- </option>
             {% for option in item['values'] %}

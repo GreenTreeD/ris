@@ -65,8 +65,72 @@
     {
       "name": "login",
       "type": "text"
+    },
+    {
+      "name": "reason",
+      "type": "select",
+      "values": ["deposit","withdraw","transfer"]
+    },
+    {
+      "name": "login",
+      "type": "text"
     }
-
+  ],
+  "bill_inner_history": [
+    {
+      "name": "sender_bill",
+      "type": "text"
+    },
+    {
+      "name": "receiver_bill",
+      "type": "text"
+    },
+    {
+      "name": "change_date",
+      "type": "date"
+    }
+  ],
+  "bill_summary": [
+    {
+      "name": "month_year",
+      "type": "month"
+    },
+    {
+      "name": "bill_id",
+      "type": "text"
+    }
+  ],
+  "currency": [],
+  "exchange_rates": [
+    {
+      "name": "from_currency_name",
+      "type": "select",
+      "sql": "SELECT `currency` FROM `currency`;"
+    },
+    {
+      "name": "to_currency_name",
+      "type": "select",
+      "sql": "SELECT `currency` FROM `currency`;"
+    },
+    {
+      "name": "rate_date",
+      "type": "date"
+    }
+  ],
+  "exchange_rate_differences": [
+    {
+      "name": "month_year",
+      "type": "month"
+    },
+    {
+      "name": "from_currency_name",
+      "type": "select",
+      "sql": "SELECT `currency` FROM `currency`;"
+    },
+    {
+      "name": "to_currency_name",
+      "type": "select",
+      "sql": "SELECT `currency` FROM `currency`;"
+    }
   ]
-
 }

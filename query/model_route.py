@@ -62,9 +62,21 @@ def generate_header(sqlheader : list):
 
 def generate_where_clause(form_data):
     where_clauses = []
+    # Словарь для хранения пар 'начало' и 'конец' диапазона
     date_ranges = {}
+
     for field, value in form_data.items():
-        if field.endswith('_begin') or field.endswith('_end'):
+        # Обработка поля month_year
+        if field == 'month_year' and value:
+            try:
+                # Пытаемся разделить значение на месяц и год
+                year, month = value.split('-')
+                where_clauses.append(f"`month` = {month} AND `year` = {year}")
+            except ValueError:
+                # Если значение не соответствует формату YYYY-MM, можем игнорировать или вызвать ошибку
+                pass
+        # Обработка дат (_begin, _end)
+        elif field.endswith('_begin') or field.endswith('_end'):
             base_field = field.rsplit('_', 1)[0]
             if base_field not in date_ranges:
                 date_ranges[base_field] = {'begin': None, 'end': None}
@@ -74,8 +86,10 @@ def generate_where_clause(form_data):
             elif field.endswith('_end'):
                 date_ranges[base_field]['end'] = value
         else:
+            # Обработка обычных полей для точного поиска
             where_clauses.append(f"{field} = '{value}'")
 
+    # Обрабатываем диапазоны дат
     for field, range_values in date_ranges.items():
         begin = range_values['begin']
         end = range_values['end']
@@ -87,6 +101,7 @@ def generate_where_clause(form_data):
         elif end:
             where_clauses.append(f"{field} <= '{end}'")
 
+    # Если есть условия, соединяем их через 'AND'
     if where_clauses:
         return "WHERE " + " AND ".join(where_clauses)
     else:
@@ -101,7 +116,6 @@ def show_resource(db_config, sql_provider, resource_name, filterdata=None):
     filtermenu = generate_filtermenu(resource_name, db_config)
     if filterdata:
         _sql = sql_provider.get('filter.sql', query=_sql[:-1], detail=generate_where_clause(filterdata))
-    print(_sql)
     result, schema = select_list(db_config, _sql)
     if result or schema:
         return ProductInfoRespronse((name, generate_header(schema), result, filtermenu), error_message="", status=True)
