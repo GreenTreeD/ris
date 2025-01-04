@@ -28,14 +28,22 @@ def query_table_menu():
     return render_with_defaults("query_menu.html", type='table', list=table)
 
 
-@blueprint_query.route('/table/<resource_name>', methods=['POST','GET'])
+@blueprint_query.route('/table/<resource_name>', methods=['POST', 'GET'])
 @role_required(['manager', 'admin'])
 @role_required_query
 def table_query(resource_name):
-    tmp = show_resource(current_app.config['db_config'], provider, resource_name)
+    if request.method == 'POST':
+        user_data = {key: value for key, value in request.form.items() if value}
+        tmp = show_resource(current_app.config['db_config'], provider, resource_name, user_data)
+    else:
+        tmp = show_resource(current_app.config['db_config'], provider, resource_name)
     if not tmp.status:
         return render_with_defaults("error.html", message=tmp.error_message)
-    return render_with_defaults("resource_template.html", name=tmp.result[0], header=tmp.result[1], content=tmp.result[2])
+    return render_with_defaults("resource_template.html",
+                                name=tmp.result[0],
+                                header=tmp.result[1],
+                                content=tmp.result[2],
+                                filtermenu=tmp.result[3])
 
 
 @blueprint_query.route('/reports', methods=['POST','GET'])
@@ -52,7 +60,9 @@ def report_query(resource_name):
     if request.method == 'GET':
         name = generate_name(resource_name.replace('create_', ''))
         curdate = date.today()
-        return render_with_defaults("report_template.html", name=name, curdate=curdate)
+        return render_with_defaults("report_template.html",
+                                    name=name,
+                                    curdate=curdate)
     else:
         user_data = request.form
         res = create_report(current_app.config['db_config'], resource_name, user_data)

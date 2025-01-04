@@ -92,7 +92,6 @@ def statistics_user_index():
 
     detalisation_bills = getbilldetalisation(current_app.config['db_config'], provider,
                                              session.get('user_login'), begin_date, end_date)
-    print(detalisation_bills.result)
     if not detalisation_bills.status:
         return render_with_defaults("error.html",
                                     message=detalisation_bills.error_message)

@@ -1,0 +1,72 @@
+{
+  "user": [
+    {
+      "name": "user_id",
+      "type": "text"
+    },
+    {
+      "name": "login",
+      "type": "text"
+    },
+    {
+      "name": "contract_date",
+      "type": "date"
+    },
+    {
+      "name": "bday",
+      "type": "date"
+    }
+  ],
+  "workers": [
+    {
+      "name": "worker_id",
+      "type": "text"
+    },
+    {
+      "name": "login",
+      "type": "text"
+    },
+    {
+      "name" : "user_role",
+      "type": "select",
+      "values" : ["admin", "manager"]
+    }
+  ],
+  "all_statistics": [
+    {
+      "name": "month_year",
+      "type": "month"
+    }
+  ],
+  "bill": [
+    {
+      "name": "login",
+      "type": "text"
+    },
+    {
+      "name": "bill_id",
+      "type": "text"
+    },
+    {
+      "name": "last_change",
+      "type": "date"
+    },
+    {
+      "name": "currency",
+      "type": "select",
+      "sql": "SELECT `currency` FROM `currency`;"
+    }
+  ],
+  "bill_history": [
+    {
+      "name": "bill_id",
+      "type": "text"
+    },
+    {
+      "name": "login",
+      "type": "text"
+    }
+
+  ]
+
+}

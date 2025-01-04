@@ -174,11 +174,12 @@ footer {
   margin-bottom: 15px;
 }
 
-.form-group label {
+.form-group label, h5 {
   display: block;
   color: #607d8b;
   font-size: 14px;
   margin-bottom: 5px;
+  font-weight: normal;
 }
 
 .form-group input {
@@ -258,6 +259,8 @@ footer {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
   display: inline-block;
+  overflow-x: auto;
+  max-width: 1140px;
 }
 
 table {

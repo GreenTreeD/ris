@@ -86,3 +86,33 @@
 <br>
 </div>
 {% endmacro %}
+
+{% macro generate_filtermenu(item)%}
+
+    {% if item['type'] != 'select' and  item['type'] != 'date'%}
+    <div class="form-group">
+        <label for="{{ item['name'] }}">{{ item['local'] }}:</label>
+        <input type="{{ item['type']}}" name="{{ item['name'] }}">
+    </div>
+    {% elif item['type'] == 'date' %}
+    <h5>{{ item['local'] }}:</h5>
+    <div class="form-group">
+    <label for="{{ item['name'] }}_begin">От:</label>
+    <input type="{{ item['type']}}" name="{{ item['name'] }}_begin">
+    </div>
+    <div class="form-group">
+    <label for="{{ item['name'] }}_end">До:</label>
+    <input type="{{ item['type']}}" name="{{ item['name'] }}_end">
+    </div>
+    {% elif  item['type'] == 'select' %}
+    <div class="form-group">
+        <lable for="{{ item['name'] }}">{{ item['local'] }}:</lable>
+        <select name="{{ item['name'] }}">
+            <option disabled selected value> -- -- </option>
+            {% for option in item['values'] %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+{% endmacro %}

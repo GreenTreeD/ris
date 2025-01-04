@@ -7,6 +7,21 @@
 {% block content %}
 <h1>{{name}}</h1>
 
+{% if filtermenu %}
+<div class="form-container">
+<details>
+    <summary>Фильтр</summary>
+    <br>
+    <form method="POST">
+
+    {% for item in filtermenu %}
+    {{ macros.generate_filtermenu(item) }}
+    {% endfor%}
+        <input type="submit" value="Применить" class="btn-submit">
+    </form>
+</details></div>
+{% endif %}
+<br>
 <div class="table-container">
     <table>
         <thead>

@@ -1,0 +1,12 @@
+{
+  "user" : "SELECT * FROM `user`;",
+  "workers" : "SELECT * FROM `workers`;",
+  "bill": "SELECT `bill_id`, `login`, `currency`, `amount`, `last_change` FROM `bill` JOIN `user` USING (`user_id`) JOIN `currency` USING (`currency_id`);",
+  "bill_history": "SELECT `bill_id`, `new_amount`,`old_amount`, `change_date`, `reason`, `login` FROM `bill_history` LEFT JOIN `workers` ON `bill_history`.`initiator` = `workers`.`worker_id` ORDER BY `change_date`;",
+  "bill_inner_history" : "SELECT * FROM `bill_inner_history`;",
+  "bill_summary": "SELECT * FROM `bill_summary`;",
+  "currency": "SELECT * FROM `currency`;",
+  "exchange_rates": "SELECT `from_currency_name`, `to_currency_name`, `rate`, `rate_date` FROM `exchange_rates` JOIN (SELECT `currency_id` AS `currency_id_f`, `currency` AS `from_currency_name` FROM `currency`) AS `a` ON `exchange_rates`.`from_currency`=`a`.`currency_id_f` JOIN (SELECT `currency_id` AS `currency_id_t`, `currency` AS `to_currency_name` FROM `currency`) AS `b` ON `exchange_rates`.`to_currency`=`b`.`currency_id_t` ORDER BY `rate_date`;",
+  "exchange_rate_differences": "SELECT `month`, `year`,`from_currency_name`, `to_currency_name`, `first_rate`, `last_rate` FROM `exchange_rate_differences` JOIN (SELECT `currency_id` AS `currency_id_f`, `currency` AS `from_currency_name` FROM `currency`) AS `a` ON `exchange_rate_differences`.`from_currency`=`a`.`currency_id_f` JOIN (SELECT `currency_id` AS `currency_id_t`, `currency` AS `to_currency_name` FROM `currency`) AS `b` ON `exchange_rate_differences`.`to_currency`=`b`.`currency_id_t`;",
+  "all_statistics": "SELECT * FROM `all_statistics`;"
+}

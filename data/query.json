@@ -30,7 +30,9 @@
       "create_exchange_rate_differences"
     ],
     "query" : [
-
+      "bill_per_client",
+      "bill_per_currency",
+      "operation_per_bill"
     ]
   }
 }
