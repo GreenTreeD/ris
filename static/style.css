@@ -57,6 +57,8 @@ font-size: 17px;
   color: #424242; /* Темно-серый для текста */
   padding: 15px;
   border-radius: 8px;
+  width: 400px;
+  margin: auto;
   margin-bottom: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 1rem;

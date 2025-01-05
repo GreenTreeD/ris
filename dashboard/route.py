@@ -232,7 +232,16 @@ def d_manager():
 @role_required(['manager'])
 def d_manager_deposit():
     if request.method == 'GET':
-        return render_with_defaults("manager_route.html", type="deposit")
+        if not session.get('client_login',''):
+            return render_with_defaults("error.html",
+                                        message="Работа с клиентом не начата")
+        bills = getbills(current_app.config['db_config'],
+                         provider,
+                         current_app.config['cache_config'],
+                         session.get('client_login', ''))
+        return render_with_defaults("manager_route.html",
+                                    bills=bills.result,
+                                    type="deposit")
     else:
         user_data = request.form
         result = deposit_manager(current_app.config['db_config'], provider, user_data, session.get('user_login'))
@@ -245,7 +254,16 @@ def d_manager_deposit():
 @role_required(['manager'])
 def d_manager_withdraw():
     if request.method == 'GET':
-        return render_with_defaults("manager_route.html", type="withdraw")
+        if not session.get('client_login',''):
+            return render_with_defaults("error.html",
+                                        message="Работа с клиентом не начата")
+        bills = getbills(current_app.config['db_config'],
+                         provider,
+                         current_app.config['cache_config'],
+                         session.get('client_login', ''))
+        return render_with_defaults("manager_route.html",
+                                    bills=bills.result,
+                                    type="withdraw")
     else:
         user_data = request.form
         result = deposit_manager(current_app.config['db_config'], provider, user_data, session.get('user_login'))
@@ -277,6 +295,63 @@ def d_manager_info():
         return render_with_defaults("user_info.html", type="POST",
                                     user_info=user_info.result,
                                     bills=bills.result)
+
+
+@blueprint_dashboard.route('/manager/transfer_outer', methods=['GET'])
+@role_required(['manager'])
+def d_manager_transfer_outer():
+    if not session.get('client_login', ''):
+        return render_with_defaults("error.html",
+                                    message="Работа с клиентом не начата")
+    bills = getbills(current_app.config['db_config'],
+                     provider,
+                     current_app.config['cache_config'],
+                     session.get('client_login', ''))
+    return render_with_defaults("manager_route.html",
+                                bills=bills.result,
+                                type="transfer_outer")
+
+
+@blueprint_dashboard.route('/manager/transfer_inner', methods=['GET'])
+@role_required(['manager'])
+def d_manager_transfer_inner():
+    if not session.get('client_login', ''):
+        return render_with_defaults("error.html",
+                                    message="Работа с клиентом не начата")
+    bills = getbills(current_app.config['db_config'],
+                     provider,
+                     current_app.config['cache_config'],
+                     session.get('client_login', ''))
+    return render_with_defaults("manager_route.html",
+                                bills=bills.result,
+                                type="transfer_inner")
+
+
+@blueprint_dashboard.route('/manager/transfer_outer', methods=['POST'])
+@blueprint_dashboard.route('/manager/transfer_inner', methods=['POST'])
+@role_required(['manager'])
+def d_manager_transfer_POST():
+    if request.form.get('receiver_login'):
+        receiver_bill = findbill(current_app.config['db_config'], provider,
+                                 [request.form.get('receiver_login'), request.form.get('sender_bill')])
+        if not receiver_bill.status:
+            return render_with_defaults("error.html",
+                                        message=receiver_bill.error_message)
+        user_data = dict(request.form)
+        user_data['receiver_bill'] = receiver_bill.result
+    else:
+        if request.form.get('receiver_bill') == request.form.get('sender_bill'):
+            return render_with_defaults("error.html",
+                                        message="Отправляющий и принимающий счета совпадают.")
+        user_data = request.form
+
+    result = transfer(current_app.config['db_config'], provider, user_data)
+    if not result.status:
+        return render_with_defaults("error.html",
+                                    message=result.error_message)
+    return render_with_defaults("message.html",
+                                header="Успех",
+                                message="Перевод был успешно зачислен.")
 
 
 @blueprint_dashboard.route('/manager/exit', methods=['POST', 'GET'])
