@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from database.select import select_list
+from database.select import select_list, select_dict
 from database.procedure import call_proc, call_proc_state
+from cache.wrapper import fetch_from_cache
 from datetime import date
 
 
@@ -11,10 +12,11 @@ class ProductInfoRespronse:
     status: bool
 
 
-def getbills(db_config, sql_provider, user_login):
+def getbills(db_config, sql_provider, cache_config, user_login):
+    cache_select_dict = fetch_from_cache('client_bills', cache_config)(select_dict)
     _sql = sql_provider.get('get_bills.sql', user_login=user_login)
-    result, scheme = select_list(db_config,_sql)
-    if result or scheme:
+    result = cache_select_dict(db_config, _sql)
+    if result:
         return ProductInfoRespronse(result, error_message="", status=True)
     return ProductInfoRespronse(result, error_message="Ошибка сервера", status=False)
 

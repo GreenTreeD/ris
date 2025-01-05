@@ -20,7 +20,7 @@
 <div class="form-container">
     <h1>Меню работы с клиентами</h1>
     <a class="button" href="{{url_for('auth_bp.registration_index')}}">Регистрация нового клиента</a>
-    <a class="button" href="{{url_for('dashboard_bp.d_manager_info')}}">Просмотр информации о клиенте</a>
+    {% if not client_login %}<a class="button" href="{{url_for('dashboard_bp.d_manager_info')}}">Просмотр информации о клиенте</a>{% endif%}
     <a class="button" href="{{url_for('dashboard_bp.d_manager_deposit')}}">Зачисление средств</a>
     <a class="button" href="{{url_for('dashboard_bp.d_manager_withdraw')}}">Вывод средств</a>
 </div>

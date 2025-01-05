@@ -20,6 +20,11 @@
       <div class="menu">
         {{macros.generate_menu(user_role)}}
       </div>
+    {% if client_login %}
+    <div class="message">
+      Ваш текущий клиент - <b>{{ client_login }}</b>
+    </div>
+    {% endif %}
     {% block content %}
     {% endblock %}
     </div>

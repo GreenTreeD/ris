@@ -1,9 +1,9 @@
+import os
+from datetime import timedelta
 from flask import Blueprint, session, redirect, url_for, current_app, request
 from access import role_required
-from database.sql_provider import SQLProvider
 from dashboard.model_route import *
-import os
-from datetime import date, timedelta
+from database.sql_provider import SQLProvider
 from utils.utils import render_with_defaults
 
 blueprint_dashboard = Blueprint('dashboard_bp', __name__, template_folder='templates')
@@ -32,8 +32,10 @@ def d_user():
     if not user_info.status:
         return render_with_defaults("error.html",
                                     message=user_info.error_message)
-
-    bills = getbills(current_app.config['db_config'], provider, session.get('user_login'))
+    bills = getbills(current_app.config['db_config'],
+                     provider,
+                     current_app.config['cache_config'],
+                     session.get('user_login'))
     if not bills.status:
         return render_with_defaults("error.html",
                                     message=bills.error_message)
@@ -142,7 +144,10 @@ def d_user_transfer_menu():
 @blueprint_dashboard.route('/user/transfer_menu/transfer_outer', methods=['GET'])
 @role_required(['user'])
 def d_user_transfer_outer():
-    bills = getbills(current_app.config['db_config'], provider, session.get('user_login'))
+    bills = getbills(current_app.config['db_config'],
+                     provider,
+                     current_app.config['cache_config'],
+                     session.get('user_login'))
     if not bills.status:
         return render_with_defaults("error.html", message=bills.error_message)
     return render_with_defaults("transfer.html",
@@ -154,7 +159,10 @@ def d_user_transfer_outer():
 @blueprint_dashboard.route('/user/transfer_menu/transfer_inner', methods=['GET'])
 @role_required(['user'])
 def d_user_transfer_inner():
-    bills = getbills(current_app.config['db_config'], provider, session.get('user_login'))
+    bills = getbills(current_app.config['db_config'],
+                     provider,
+                     current_app.config['cache_config'],
+                     session.get('user_login'))
     if not bills.status:
         return render_with_defaults("error.html",
                                     message=bills.error_message)
@@ -246,7 +254,7 @@ def d_manager_withdraw():
         return render_with_defaults("message.html", header="Успешное снятие", message="Проверьте целевой счёт.")
 
 
-@blueprint_dashboard.route('/manager/client_info', methods=['POST', 'GET'])
+@blueprint_dashboard.route('/manager/client', methods=['POST', 'GET'])
 @role_required(['manager'])
 def d_manager_info():
     if request.method == 'GET':
@@ -256,11 +264,32 @@ def d_manager_info():
         if not user_info.status:
             return render_with_defaults("error.html",
                                         message=user_info.error_message)
+        session['client_login'] = user_info.result[6]
 
-        bills = getbills(current_app.config['db_config'], provider, request.form.get('login'))
+        bills = getbills(current_app.config['db_config'],
+                         provider,
+                         current_app.config['cache_config'],
+                         user_info.result[6])
+
         if not bills.status:
             return render_with_defaults("error.html",
                                         message=bills.error_message)
         return render_with_defaults("user_info.html", type="POST",
                                     user_info=user_info.result,
                                     bills=bills.result)
+
+
+@blueprint_dashboard.route('/manager/exit', methods=['POST', 'GET'])
+@role_required(['manager'])
+def d_manager_exit():
+    if session.get('client_login',''):
+        session.pop('client_login')
+        return render_with_defaults("message.html",
+                                    title="До свидания",
+                                    message="Работа с клиентом закончена.")
+    else:
+        return render_with_defaults("error.html",
+                                    message="Работа с клиентом не начата.")
+
+
+

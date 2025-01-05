@@ -35,9 +35,9 @@
     {% if bills %}
     {% for bill in bills %}
     <div class="bill-card">
-        <div class="bill-id">{{ bill[0] }}</div>
-        <div class="bill-amount">{{ bill[2] }} {{ bill[1] }}</div>
-        <div class="bill-date">Последнее изменение: {{ bill[3].strftime('%d.%m.%Y %H:%M') }}</div>
+        <div class="bill-id">{{ bill['bill_id'] }}</div>
+        <div class="bill-amount">{{ bill['amount'] }} {{ bill['currency'] }}</div>
+        <div class="bill-date">Последнее изменение: {{ bill['last_change'].strftime('%d.%m.%Y %H:%M') }}</div>
     </div>
     {% endfor %}
     {% else %}

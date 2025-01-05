@@ -12,6 +12,9 @@ app = Flask(__name__)
 with open("data/dbconfig.json") as f:
     app.config['db_config'] = json.load(f)
 
+with open("data/cache_config.json") as f:
+    app.config['cache_config'] = json.load(f)
+
 
 app.secret_key = 'You will never guess'
 

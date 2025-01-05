@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-{% if type == 'deposit'%}Зачисление{% else %}Снятие{% endif %}
+{% if type == 'deposit'%}Зачисление{% elif type == 'withdraw' %}Снятие{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
         </div>
     </form>
 </div>
-{% else %}
+{% elif type == 'withdraw %}
 <div class="form-container">
     <h1>Снятие денег со счёта</h1>
     <form method="POST" action="">
@@ -52,6 +52,33 @@
             <button type="submit" class="btn-submit">Снять</button>
         </div>
     </form>
+</div>
+{% elif type == 'transfer_inner' %}
+<div class="form-container">
+  <h1>Перевод между счетами клиента</h1>
+  <form method="POST" action="">
+    <!-- Выбор отправляющего счета -->
+    <div class="form-group">
+      <label for="sender-bill">Отправляющий счет:</label>
+      <input type="text" name="sender_bill" id="sender-bill" placeholder="00000000001" required>
+    </div>
+
+    <!-- Выбор принимающего счета -->
+    <div class="form-group">
+      <label for="receiver-bill">Принимающий счет:</label>
+      <input type="text" name="receiver_bill" id="receiver-bill" placeholder="00000000002" required>
+    </div>
+
+    <!-- Поле для ввода суммы -->
+    <div class="form-group">
+      <label for="amount">Сумма:</label>
+      <input type="number" id="amount" name="amount" required placeholder="Введите сумму" min="0.01" step="0.01">
+    </div>
+    <!-- Кнопка отправки -->
+    <div class="form-group">
+      <button type="submit" class="btn-submit">Перевести</button>
+    </div>
+  </form>
 </div>
 {% endif %}
 {% endblock %}
