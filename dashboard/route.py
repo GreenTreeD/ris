@@ -1,5 +1,5 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, date
 from flask import Blueprint, session, redirect, url_for, current_app, request
 from access import role_required
 from dashboard.model_route import *

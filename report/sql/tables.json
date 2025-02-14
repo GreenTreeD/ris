@@ -1,0 +1,5 @@
+{
+  "bill_summary": "SELECT * FROM `bill_summary`;",
+  "exchange_rate_differences": "SELECT `month`, `year`,`from_currency_name`, `to_currency_name`, `first_rate`, `last_rate` FROM `exchange_rate_differences` JOIN (SELECT `currency_id` AS `currency_id_f`, `currency` AS `from_currency_name` FROM `currency`) AS `a` ON `exchange_rate_differences`.`from_currency`=`a`.`currency_id_f` JOIN (SELECT `currency_id` AS `currency_id_t`, `currency` AS `to_currency_name` FROM `currency`) AS `b` ON `exchange_rate_differences`.`to_currency`=`b`.`currency_id_t`;",
+  "all_statistics": "SELECT * FROM `all_statistics`;"
+}

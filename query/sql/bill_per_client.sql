@@ -1,1 +1,0 @@
-SELECT login, COUNT(bill_id) AS count FROM bill JOIN `user` USING (user_id) GROUP BY user_id ORDER BY count;

@@ -38,4 +38,5 @@
         </tbody>
       </table>
 </div>
+{% if type == 'report' %}<a class="button" href="{{url_for('report_bp.report_create', resource_name=resource_name)}}">Создать отчёт</a>{% endif %}
 {% endblock %}

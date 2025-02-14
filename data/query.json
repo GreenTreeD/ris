@@ -7,32 +7,30 @@
       "bill_history",
       "bill_inner_history",
       "currency",
-      "exchange_rates",
-      "exchange_rate_differences",
-      "bill_summary",
-      "all_statistics"
+      "exchange_rates"
     ],
     "report": [
-      "create_all_statistics"
+      "exchange_rate_differences",
+      "all_statistics",
+      "bill_summary"
     ],
-    "query" : [
-
+    "procedure" : [
+      "all_statistics"
     ]
   },
   "manager": {
     "table": [
+      "currency",
+      "bill"
+    ],
+    "report": [
       "all_statistics",
       "exchange_rate_differences",
       "bill_summary"
     ],
-    "report": [
+    "procedure" : [
       "create_bill_summary",
       "create_exchange_rate_differences"
-    ],
-    "query" : [
-      "bill_per_client",
-      "bill_per_currency",
-      "operation_per_bill"
     ]
   }
 }

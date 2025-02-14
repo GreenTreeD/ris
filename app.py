@@ -5,6 +5,7 @@ from auth.route import blueprint_auth
 from currency.route import blueprint_currency
 from dashboard.route import blueprint_dashboard
 from query.route import blueprint_query
+from report.route import blueprint_report
 from utils.utils import render_with_defaults
 
 
@@ -22,6 +23,7 @@ app.register_blueprint(blueprint_auth, url_prefix='/auth')
 app.register_blueprint(blueprint_currency, url_prefix='/currency')
 app.register_blueprint(blueprint_dashboard, url_prefix='/dashboard')
 app.register_blueprint(blueprint_query, url_prefix='/query')
+app.register_blueprint(blueprint_report, url_prefix='/report')
 
 
 @app.route('/')

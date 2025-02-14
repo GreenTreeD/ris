@@ -1,1 +1,0 @@
-SELECT currency, COUNT(bill_id) AS count FROM bill JOIN currency USING (currency_id) GROUP BY currency_id ORDER BY count;

@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, render_template
+from flask import session, request
 import json
 from utils.utils import render_with_defaults
 
@@ -33,7 +33,7 @@ def role_required(role: list):
 # тут не передаём имя того, что проверяем, так как resourse_name будет передан уже при вызове функции, а не до этого
 # resourse_name не может быть непосредственно передан в декоратор до того, как функция будет вызвана,
 # потому что в момент декорирования Python ещё не знает значение этого параметра.
-def role_required_query(func):
+def role_required_stats(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         name = kwargs.get('resource_name')
@@ -42,8 +42,12 @@ def role_required_query(func):
         if name:
             with open("data/query.json") as f:
                 query_file = json.load(f)
-            if (name in query_file[user_role]['table']) or (name in query_file[user_role]['report']):
-                return func(*args, **kwargs)
+            if request.blueprint == 'query_bp':
+                if name in query_file[user_role]['table']:
+                    return func(*args, **kwargs)
+            elif request.blueprint == 'report_bp':
+                if name in query_file[user_role]['report'] or name in query_file[user_role]['procedure']:
+                    return func(*args, **kwargs)
             else:
                 return render_with_defaults("error.html", message="У вас нет прав на просмотр данной страницы.")
         else:

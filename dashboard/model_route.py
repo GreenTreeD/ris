@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from database.select import select_list, select_dict
 from database.procedure import call_proc, call_proc_state
 from cache.wrapper import fetch_from_cache
-from datetime import date
+from flask import current_app
+from cache.redis_cache import RedisCache
 
 
 @dataclass
@@ -16,7 +17,7 @@ def getbills(db_config, sql_provider, cache_config, user_login):
     cache_select_dict = fetch_from_cache('client_bills', cache_config)(select_dict)
     _sql = sql_provider.get('get_bills.sql', user_login=user_login)
     result = cache_select_dict(db_config, _sql)
-    if result:
+    if result is not None:
         return ProductInfoRespronse(result, error_message="", status=True)
     return ProductInfoRespronse(result, error_message="Ошибка сервера", status=False)
 
@@ -30,6 +31,9 @@ def newbill(db_config, sql_provider, user_data):
         return ProductInfoRespronse((), error_message="Пользователь не существует", status=False)
     res = None
     result = call_proc(db_config, 'create_bill', (user_data['login'], user_data['currency'], res))
+
+    cache = RedisCache(current_app.config['cache_config']['redis'])
+    cache.flush('client_bills')
     if result:
         return ProductInfoRespronse(result[2], error_message="", status=True)
     return ProductInfoRespronse(result, error_message="Произошла ошибка при создании нового счёта", status=False)
@@ -80,6 +84,9 @@ def transfer(db_config, sql_provider, user_data):
                                                      user_data['receiver_bill'], user_data['amount']))
     if not result:
         return ProductInfoRespronse((), error_message="", status=True)
+
+    cache = RedisCache(current_app.config['cache_config'])
+    cache.flush('client_bills')
     return ProductInfoRespronse((result.args[0], result.args[1]), error_message=result.args[1], status=False)
 
 
@@ -129,7 +136,6 @@ def getbilldetalisation(db_config, sql_provider, user_login, begin_date, end_dat
         return ProductInfoRespronse((), error_message="", status=True)
 
     bills = [(i[0],i[1]) for i in result] # номер счёта и валюта
-    print(bills)
     bill_detalisation = []
     # item in bill_detalisation: bill_id, currency, total_deposit, total_withdraw, total_transfer_out, total_transfer_in
 
@@ -183,7 +189,10 @@ def deposit_manager(db_config, sql_provider, user_data, login):
         return ProductInfoRespronse((), error_message="Идентификационный номер не был найден.", status=False)
     result = call_proc_state(db_config, 'deposit', (user_data.get('amount'), user_data.get('account_number'), result[0][0]))
     if not result:
+        cache = RedisCache(current_app.config['cache_config']['redis'])
+        cache.flush('client_bills')
         return ProductInfoRespronse((), error_message="", status=True)
+
     return ProductInfoRespronse((result.args[0], result.args[1]), error_message=result.args[1], status=False)
 
 
@@ -196,6 +205,9 @@ def withdraw_manager(db_config, sql_provider, user_data, login):
         return ProductInfoRespronse((), error_message="Идентификационный номер не был найден.", status=False)
     result = call_proc_state(db_config, 'withdraw', (user_data.get('amount'), user_data.get('account_number'), result[0][0]))
     if not result:
+        cache = RedisCache(current_app.config['cache_config']['redis'])
+        cache.flush('client_bills')
+
         return ProductInfoRespronse((), error_message="", status=True)
     return ProductInfoRespronse((result.args[0], result.args[1]), error_message=result.args[1], status=False)
 

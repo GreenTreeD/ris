@@ -33,6 +33,10 @@ def get_currency_rate(db_config, sql_provider, to_currency):
 
 
 def set_currency_rates(db_config, sql_provider, info):
+    _sql = sql_provider.get('get_currency.sql', today=date.today(), to_currency="USD")
+    result, schema = select_list(db_config, _sql)
+    if result:
+        return ProductInfoRespronse((), error_message="Курс на сегодня был внесён.", status=False)
     currency_dict = dict()
     _sql = sql_provider.get('currency_names_set.sql')
     result, schema = select_list(db_config, _sql)

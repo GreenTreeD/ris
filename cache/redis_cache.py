@@ -30,3 +30,9 @@ class RedisCache:
             return value_dict
         else:
             return None
+
+    def flush(self, name: str):
+        value_js = self.conn.get(name)
+        if value_js:
+            self.conn.delete(name)
+            print(f"Deleted '{name}'")

@@ -36,7 +36,6 @@ def exist_check(db_config, user_input_data, sql_provider):
         _sql = sql_provider.get('check_exist.sql', user_login=user_input_data['login'], table='workers')
     else:
         _sql = sql_provider.get('check_exist.sql', user_login=user_input_data['login'], table='user')
-    print(_sql)
     result, schema = select_string(db_config, _sql)
     if not schema:
         return ProductInfoRespronse(result, error_message="Ошибка сервера", status=False)
